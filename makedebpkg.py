@@ -159,6 +159,10 @@ if __name__ == '__main__':
 	if not isdir(pkgdir):
 		mkdir(pkgdir, 751)
 
+	debdir = pkgdir + '/DEBIAN'
+	if not isdir(debdir):
+		mkdir(debdir, 751)
+
 	# Expanding Bash vars
 	expand_vars(pkgparser, srcdir_path, pkgdir)
 	pkgparser.print_debug()
@@ -223,6 +227,8 @@ if __name__ == '__main__':
 		# for i in pkgparser.package_instructions:
 		# 	run_cmd(i).check_returncode()
 
+
+	# Generating control file
 	con = ControlData()
 	con.import_from_pkgdata(pkgparser, maintainer, essential)
-	con.export(pkgdir + '/control')
+	con.export(debdir + '/control')
