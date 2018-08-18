@@ -154,9 +154,13 @@ if __name__ == '__main__':
 	if pkgparser.epoch != 0:
 		pkgdir_name += '-' + str(pkgparser.epoch)
 
+	pkgdir = rootpath + '/' + pkgdir_name
+
+	if not isdir(pkgdir):
+		mkdir(pkgdir, 751)
 
 	# Expanding Bash vars
-	expand_vars(pkgparser, srcdir_path, rootpath + '/' + pkgdir_name)
+	expand_vars(pkgparser, srcdir_path, pkgdir)
 	pkgparser.print_debug()
 
 	# Downloading source
@@ -221,4 +225,4 @@ if __name__ == '__main__':
 
 	con = ControlData()
 	con.import_from_pkgdata(pkgparser, maintainer, essential)
-	con.export(pkgdir_name + '/control')
+	con.export(pkgdir + '/control')
