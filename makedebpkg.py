@@ -117,7 +117,8 @@ if __name__ == '__main__':
 	parser = ArgumentParser()
 	parser.add_argument("PKGBUILD", type=str)
 	parser.add_argument('--maintainer', type=str)
-	parser.add_argument('--essential', action='store_true')
+	parser.add_argument('-e', '--essential', action='store_true')
+	parser.add_argument('-i', '--install', action='store_true')
 
 	args = parser.parse_args()
 
@@ -232,3 +233,10 @@ if __name__ == '__main__':
 	con = ControlData()
 	con.import_from_pkgdata(pkgparser, maintainer, essential)
 	con.export(debdir + '/control')
+
+
+	# Building deb package
+	run_cmd('dpkg -b {}'.format(pkgdir))
+
+	if args.install:
+		run_cmd('dpkg -i {}'.format(pkgdir + '.deb'))
