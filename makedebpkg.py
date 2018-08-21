@@ -141,7 +141,7 @@ if __name__ == '__main__':
 	srcdir_path = rootpath + '/src'
 
 	if not isdir(srcdir_path):
-		mkdir(srcdir_path, 755)
+		mkdir(srcdir_path, 0o755)
 
 	# Parsing PKGBUILD
 	pkgparser = PkgData()
@@ -158,11 +158,11 @@ if __name__ == '__main__':
 	pkgdir = rootpath + '/' + pkgdir_name
 
 	if not isdir(pkgdir):
-		mkdir(pkgdir, 755)
+		mkdir(pkgdir, 0o755)
 
 	debdir = pkgdir + '/DEBIAN'
 	if not isdir(debdir):
-		mkdir(debdir, 755)
+		mkdir(debdir, 0o755)
 
 	# Expanding Bash vars
 	expand_vars(pkgparser, srcdir_path, pkgdir)
@@ -210,24 +210,26 @@ if __name__ == '__main__':
 	# Building package
 	if pkgparser.prepare_instructions:
 		print('[ prepare() ]')
-		# for i in pkgparser.prepare_instructions:
-		# 	run_cmd(i).check_returncode()
+		for i in pkgparser.prepare_instructions:
+			run_cmd(i).check_returncode()
 
 	if pkgparser.build_instructions:
 		print('[ build() ]')
-		# for i in pkgparser.build_instructions:
-		# 	run_cmd(i).check_returncode()
+		for i in pkgparser.build_instructions:
+			run_cmd(i).check_returncode()
 
 	if pkgparser.check_instructions:
 		print('[ check() ]')
-		# for i in pkgparser.check_instructions:
-		# 	run_cmd(i).check_returncode()
+		for i in pkgparser.check_instructions:
+			run_cmd(i).check_returncode()
 
 	if pkgparser.package_instructions:
 		print('[ package() ]')
-		# for i in pkgparser.package_instructions:
-		# 	run_cmd(i).check_returncode()
+		for i in pkgparser.package_instructions:
+			# run_cmd(i).check_returncode()
+			print(i)
 
+	exit(0)
 
 	# Generating control file
 	con = ControlData()
@@ -236,7 +238,7 @@ if __name__ == '__main__':
 
 
 	# Building deb package
-	run_cmd('dpkg -b {}'.format(pkgdir))
+	run_cmd(['dpkg-buildpackage', pkgdir])
 
 	if args.install:
 		run_cmd('dpkg -i {}'.format(pkgdir + '.deb'))
