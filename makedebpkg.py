@@ -231,11 +231,8 @@ if __name__ == '__main__':
 	con.export(debdir + '/control')
 
 
-	exit(0)
-
-
 	# Building deb package
 	run_cmd(['dpkg-buildpackage', pkgdir])
 
 	if args.install:
-		run_cmd('dpkg -i {}'.format(pkgdir + '.deb'))
+		run_cmd(['dpkg', '-i', '{}'.format(pkgdir + '.deb')])
