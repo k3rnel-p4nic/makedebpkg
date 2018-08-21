@@ -119,13 +119,6 @@ class PkgData(object):
 
 		lines = [w.replace('\t', '').replace('\n', '') for w in lines[start:end]]
 
-		for line in lines:
-			i = 0
-			while line[i] == ' ':
-				i += 1
-
-			lines[lines.index(line)] = line[i:]
-
 		return lines
 
 
