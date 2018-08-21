@@ -211,29 +211,31 @@ if __name__ == '__main__':
 	if pkgparser.prepare_instructions:
 		print('[ prepare() ]')
 		for i in pkgparser.prepare_instructions:
-			run_cmd(i.split()).check_returncode()
+			run_cmd(i.replace('"', '').split()).check_returncode()
 
 	if pkgparser.build_instructions:
 		print('[ build() ]')
 		for i in pkgparser.build_instructions:
-			run_cmd(i.split()).check_returncode()
+			run_cmd(i.replace('"', '').split()).check_returncode()
 
 	if pkgparser.check_instructions:
 		print('[ check() ]')
 		for i in pkgparser.check_instructions:
-			run_cmd(i.split()).check_returncode()
+			run_cmd(i.replace('"', '').split()).check_returncode()
 
 	if pkgparser.package_instructions:
 		print('[ package() ]')
 		for i in pkgparser.package_instructions:
-			run_cmd(i.split()).check_returncode()
+			run_cmd(i.replace('"', '').split()).check_returncode()
 
-	exit(0)
 
 	# Generating control file
 	con = ControlData()
 	con.import_from_pkgdata(pkgparser, maintainer, essential)
 	con.export(debdir + '/control')
+
+
+	exit(0)
 
 
 	# Building deb package
