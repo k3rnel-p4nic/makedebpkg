@@ -141,7 +141,7 @@ if __name__ == '__main__':
 	srcdir_path = rootpath + '/src'
 
 	if not isdir(srcdir_path):
-		mkdir(srcdir_path, 750)
+		mkdir(srcdir_path, 755)
 
 	# Parsing PKGBUILD
 	pkgparser = PkgData()
@@ -158,11 +158,11 @@ if __name__ == '__main__':
 	pkgdir = rootpath + '/' + pkgdir_name
 
 	if not isdir(pkgdir):
-		mkdir(pkgdir, 751)
+		mkdir(pkgdir, 755)
 
 	debdir = pkgdir + '/DEBIAN'
 	if not isdir(debdir):
-		mkdir(debdir, 751)
+		mkdir(debdir, 755)
 
 	# Expanding Bash vars
 	expand_vars(pkgparser, srcdir_path, pkgdir)
