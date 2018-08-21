@@ -204,11 +204,8 @@ class PkgData(object):
 						if i.endswith(':'):
 							temp = i
 
-						else:
-							temp += ' ' + i
-
 						if i == tmplist[-1] or tmplist[tmplist.index(i) + 1].endswith(':'):
-							self.optdepends.append(temp)
+							self.optdepends.append(temp[:-1])
 
 				elif line.startswith('makedepends=') and not self.makedepends:
 					self.makedepends = self.striplist(line, 'makedepends')

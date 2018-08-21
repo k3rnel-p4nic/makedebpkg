@@ -108,3 +108,4 @@ class ControlData(object):
 
 			f.write('Maintainer: {}\n'.format(self.maintainer))
 			f.write('Essential: {}'.format('yes' if self.essential else 'no'))
+			f.write('')
