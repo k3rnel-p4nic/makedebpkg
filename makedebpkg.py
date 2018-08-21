@@ -141,7 +141,7 @@ if __name__ == '__main__':
 	srcdir_path = rootpath + '/src'
 
 	if not isdir(srcdir_path):
-		mkdir(srcdir_path, 700)
+		mkdir(srcdir_path, 750)
 
 	# Parsing PKGBUILD
 	pkgparser = PkgData()
