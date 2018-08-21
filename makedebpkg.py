@@ -232,7 +232,7 @@ if __name__ == '__main__':
 
 
 	# Building deb package
-	run_cmd(['dpkg-buildpackage', pkgdir])
+	run_cmd(['dpkg', '-b', pkgdir])
 
 	if args.install:
 		run_cmd(['dpkg', '-i', '{}'.format(pkgdir + '.deb')])
