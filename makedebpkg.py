@@ -132,10 +132,6 @@ if __name__ == '__main__':
 	else:
 		maintainer = 'None'
 
-	if args.essential:
-		essential = True
-	else:
-		essential = False
 	# rootpath = dirname(realpath(pkgbuild_path))
 	rootpath = getcwd()
 	srcdir_path = rootpath + '/src'
@@ -231,7 +227,7 @@ if __name__ == '__main__':
 
 	# Generating control file
 	con = ControlData()
-	con.import_from_pkgdata(pkgparser, maintainer, essential)
+	con.import_from_pkgdata(pkgparser, maintainer, args.essential)
 	con.export(debdir + '/control')
 
 
