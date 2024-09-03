@@ -33,7 +33,61 @@
 from urllib.request import urlopen
 from git import Repo as g
 from os.path import exists as path_exists
+import os
 
+from urllib.request import urlretrieve, urlopen
+from urllib.parse import urlparse
+from sys import stdout
+
+
+def download_manager(url, destdir=os.getcwd(), proxy=None, auth_proxy=None):
+	"""
+	Function to download files using HTTP.
+	Returns: path of the downloaded file
+	"""
+	result = urlopen(url)
+	result_url = result.url
+	result_url_parse = urlparse(result_url)
+	result_path = result_url_parse.path
+	filename = os.path.basename(result_path)
+	filepath = (destdir if destdir[-1] == '/' else destdir + '/') + filename
+
+	def reporthook(count, block_size, total_size):
+		percent = min(int(count * block_size * 100 / total_size), 100)
+		progress_size = int(count * block_size)
+
+		bar_len = 50
+		filled_len = int(round(percent / 2.0))
+		bar = '=' * filled_len + '-' * (bar_len - filled_len)
+		unit = 'B'
+
+		if total_size > 1000**3:
+			progress_size /= 1000**3
+			total_size /= 1000**3
+			unit = 'GB'
+
+		elif total_size > 1000**2:
+			progress_size /= 1000**2
+			total_size /= 1000**2
+			unit = 'MB'
+
+		elif total_size > 1000:
+			progress_size /= 1000
+			total_size /= 1000
+			unit = 'KB'
+
+		if progress_size > total_size:
+			progress_size = total_size
+
+		stdout.write(f'\r[{bar}] {percent}%,  {progress_size:.2f} {unit} / {total_size:.2f} {unit}')
+
+
+	if not os.path.exists(filepath):
+		print(f'Downloading {filename}')
+		urlretrieve(url, filepath, reporthook)
+		print('')
+
+	return filepath
 
 class PkgDownloadManager(object):
 	"""Simple Download Manager class"""
@@ -47,7 +101,11 @@ class PkgDownloadManager(object):
 		# Progress bar thanks to https://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
 		u = urlopen(url)
 		meta = u.info()
+		print(meta)
 		filename = meta['Content-Disposition'][meta['Content-Disposition'].find('filename=') + 9:]    # Translating index of 'filename='.size()
+
+		if filename.startswith('"') and filename.endswith('"'):
+			filename = filename[1:-1]
 
 		if path_exists(self.__rootdir + '/' + filename):
 			return filename
@@ -70,7 +128,7 @@ class PkgDownloadManager(object):
 				buffer = u.read(blocksz)
 
 			return filename
-			
+
 
 	def git(self, url):
 		"""Simple git clone method"""

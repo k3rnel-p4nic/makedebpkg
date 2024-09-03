@@ -87,14 +87,14 @@ class ControlData(object):
 
 	def export(self, filepath):
 		with open(filepath, 'w') as f:
-			f.write('Package: {}\n'.format(self.package))
-			f.write('Version: {}\n'.format(self.version))
+			f.write(f'Package: {self.package}\n')
+			f.write(f'Version: {self.version}\n')
 			if self.description:
-				f.write('Description: {}\n'.format(self.description))
+				f.write(f'Description: {self.description}\n')
 			
 			f.write('Architecture: {}\n'.format(' '.join(self.architecture)))
 			if self.homepage:
-				f.write('Homepage: {}\n'.format(self.homepage))
+				f.write(f'Homepage: {self.homepage}\n')
 			if self.depends:
 				f.write('Depends: {}\n'.format(', '.join(self.depends)))
 			if self.recommends:
@@ -106,6 +106,6 @@ class ControlData(object):
 			if self.replaces:
 				f.write('Replaces: {}\n'.format(', '.join(self.replaces)))
 
-			f.write('Maintainer: {}\n'.format(self.maintainer))
+			f.write(f'Maintainer: {self.maintainer}\n')
 			f.write('Essential: {}'.format('yes' if self.essential else 'no'))
 			f.write('\n')

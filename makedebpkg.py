@@ -31,14 +31,15 @@
 
 
 from argparse import ArgumentParser
-from os.path import realpath, dirname, isdir
+from os.path import realpath, dirname, isdir, exists as path_exists
 from sys import stderr
-from os import getuid, getcwd, mkdir, environ
+from os import getuid, getcwd, mkdir, environ, rename
 from tarfile import open as tar_open
 from zipfile import ZipFile
 from subprocess import run as run_cmd
+from shutil import move
 
-from pkgdownload import PkgDownloadManager
+from pkgdownload import PkgDownloadManager, download_manager
 from pkgdata import PkgData
 from control import ControlData
 
@@ -125,6 +126,22 @@ if __name__ == '__main__':
 	# Parsing basic paths
 	pkgbuild_path = args.PKGBUILD
 	
+	if pkgbuild_path.startswith('http') or '.com' in pkgbuild_path:
+		outfile = download_manager(pkgbuild_path)
+
+		if '.tar' in outfile:
+			with tar_open(outfile) as tar_file:
+				tar_file.extractall()
+
+			if path_exists(outfile + '/PKGBUILD'):
+				move(outfile + '/PKGBUILD', getcwd())
+
+		else:
+			rename(outfile, 'PKGBUILD')
+
+		pkgbuild_path = getcwd() + '/PKGBUILD'
+
+
 	if args.maintainer:
 		maintainer = args.maintainer
 	elif environ.get('MAINTAINER'):
